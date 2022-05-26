@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <title>ODE Numerical</title>
+    <style>
+        div {
+            margin-top: 5mm;
+        }
+    </style>
+
+</head>
+<body>
+    <p>You can use this app to solve numerically first-order ODE of type: \(y' = f(t, y)\).</p>
+    <p> <b>Attention!</b> Use accurately as there is no check for the bad initial conditions. </p>
+    <button id="show_functions">Hint: math functions designation</button>
+    <div id="math_functions" style="display: none;">
+        <table>
+            <tr>
+                <th>Math function</th>
+                <th>Designation</th>
+            </tr>
+            <tr>
+                <td>\(a^b\)</td>
+                <td>Math.pow(a,b)</td>
+            </tr>
+            <tr>
+                <td>\(e^t\)</td>
+                <td>Math.exp(t)</td>
+            </tr>
+            <tr>
+                <td>\(\ln{t}\)</td>
+                <td>Math.log(t)</td>
+            </tr>
+            <tr>
+                <td>\(\sin{t}\)</td>
+                <td>Math.sin(t)</td>
+            </tr>
+            <tr>
+                <td>\(\cos{t}\)</td>
+                <td>Math.cos(t)</td>
+            </tr>
+            <tr>
+                <td>\(\tan{t}\)</td>
+                <td>Math.tan(t)</td>
+            </tr>
+            <tr>
+                <td>\(\arcsin{t}\)</td>
+                <td>Math.asin(t)</td>
+            </tr>
+            <tr>
+                <td>\(\arccos{t}\)</td>
+                <td>Math.acos(t)</td>
+            </tr>
+            <tr>
+                <td>\(\arctan{t}\)</td>
+                <td>Math.atan(t)</td>
+            </tr>
+            <tr>
+                <td>\(\pi\)</td>
+                <td>Math.PI</td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        let functions_show = false;
+        document.getElementById("show_functions").addEventListener("click", function() {
+            if (!functions_show) {
+                document.getElementById("math_functions").style = "display: contents;"
+                functions_show = true;
+            } else {
+                document.getElementById("math_functions").style = "display: none;"
+                functions_show = false;
+            }
+            
+        })
+    </script>
+    <div>
+        <label for="input_text">\(f(t,y)\): </label>
+        <input type="text" id="input_text" name="input_text">
+    </div>
+    <div>
+        <label for="method">Choose a method: </label>
+        <br>
+        <select name="method" id="method">
+            <option value="euler_implicit">Euler implicit</option>
+            <option value="runge_kutta_explicit">Runge-Kutta explicit</option>
+        </select>
+    </div>
+    <div>
+        <label>Initial values: </label>
+        <br>
+        <label for="initial_t">\(t_{0}\): </label>
+        <input type="text" id="initial_t" name="initial_t" value="0" size="5">
+        <label for="initial_y">\(y_{0}\): </label>
+        <input type="text" id="initial_y" name="initial_y" value="0" size="5">
+    </div>
+    <div>
+        <label for="final_t">Final value of \(t\): </label>
+        <input type="text" id="final_t" name="final_t" size="5">
+    </div>
+    <div>
+        <label for="step">Define time step: </label>
+        <input type="text" id="step" name="step" value="0.1" size="5">
+    </div>
+    <div>
+        <input type="submit" id="but_submit">
+    </div>   
+
+    <p id="answer" style="font-size: 10mm;"></p>
+    <canvas id="graph"></canvas>
+    <script src="numerical.js"></script>
+    <script src="runge-kutta-explicit.js"></script>
+    <script src="euler-implicit.js"></script>
+    <script src="calculate.js"></script>
+    <script src="draw_graph.js"></script>
+</body>
+</html>
+
+
