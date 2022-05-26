@@ -4,7 +4,7 @@ but.addEventListener("click", function() {
     t_0 = Number(document.getElementById("initial_t").value);
     y_0 = Number(document.getElementById("initial_y").value);
     t_interest = Number(document.getElementById("final_t").value);
-    num_cycles = t_interest / h;
+    num_cycles = (t_interest - t_0) / h;
     num_cycles_implicit_y = 100;
     method = document.getElementById("method").value;
     text_fun = document.getElementById("input_text").value;
