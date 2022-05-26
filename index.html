@@ -16,7 +16,7 @@
 </head>
 <body>
     <p>You can use this app to solve numerically first-order ODE of type: \(y' = f(t, y)\).</p>
-    <p> <b>Attention!</b> Use accurately as there is no check for the bad initial conditions. </p>
+    <p> <b>Attention!</b> Use accurately as there is no check for the bad initial conditions and mistakes in function. </p>
     <button id="show_functions">Hint: math functions designation</button>
     <div id="math_functions" style="display: none;">
         <table>
@@ -100,6 +100,10 @@
         <input type="text" id="initial_y" name="initial_y" value="0" size="5">
     </div>
     <div>
+        <label for="start_t">Start value of \(t\) (\(t \leq t_{0}\)): </label>
+        <input type="text" id="start_t" name="start_t" size="5" value="0">
+    </div>
+    <div>
         <label for="final_t">Final value of \(t\) (\(t \gt t_{0}\)): </label>
         <input type="text" id="final_t" name="final_t" size="5">
     </div>
@@ -111,7 +115,9 @@
         <input type="submit" id="but_submit" value="Calculate">
     </div>   
 
-    <p id="answer" style="font-size: 10mm;"></p>
+    <!-- <p id="answer" style="font-size: 10mm;"></p> -->
+    <p id="t_answer" style="font-size: 10mm;"></p>
+    <p id="y_answer" style="font-size: 10mm;"></p>
     <canvas id="graph"></canvas>
     <script src="numerical.js"></script>
     <script src="runge-kutta-explicit.js"></script>

@@ -3,22 +3,35 @@ const c = canvas.getContext('2d');
 canvas.width = 500;
 canvas.height = 500;
 
+let min_y;
+let max_y;
+let min_t;
+let max_t;
+
+let pseudo_width;
+let pseudo_height;
+let t_coef;
+let y_coef;
+
 function draw_graph() {
+    // console.log("t_coef = ", t_coef);
     c.rect(0,0, canvas.width, canvas.height);
     c.fillStyle = "white";
     c.fill();
     c.stroke();
-    let min_y = Math.min(...list_y);
-    let max_y = Math.max(...list_y);
-    let min_t = Math.min(...list_t);
-    let max_t = Math.max(...list_t);
+
+    min_y = Math.min(...list_y);
+    max_y = Math.max(...list_y);
+    min_t = Math.min(...list_t);
+    max_t = Math.max(...list_t);
     
-    let pseudo_width = 2*Math.max(Math.abs(max_t), Math.abs(min_t));
-    let pseudo_height = 2*Math.max(Math.abs(max_y), Math.abs(min_y));
-    let t_coef = canvas.width/pseudo_width;
-    let y_coef = canvas.height/pseudo_height;
+    pseudo_width = 2*Math.max(Math.abs(max_t), Math.abs(min_t));
+    pseudo_height = 2*Math.max(Math.abs(max_y), Math.abs(min_y));
+    t_coef = canvas.width/pseudo_width;
+    y_coef = canvas.height/pseudo_height;
 
     c.lineWidth = 2;
+    c.setLineDash([]);
     
     c.beginPath();
     c.moveTo(0, canvas.height/2);
@@ -62,22 +75,29 @@ function draw_graph() {
         c.fillStyle = "red";
         c.fill();
     }
+
+
+    // draw green dot
+    let best_coord_x = list_t[0];
+    let best_coord_y = list_y[0];
+    let clicked_pseudo_x = -pseudo_width/2 + mouse_click_x / t_coef;
+    let clicked_pseudo_y = pseudo_height/2 - mouse_click_y / y_coef;
+    for (let i = 0; i < list_y.length; i++) {
+        if (Math.sqrt((list_t[i] - clicked_pseudo_x)*(list_t[i] - clicked_pseudo_x) + (list_y[i] - clicked_pseudo_y)*(list_y[i] - clicked_pseudo_y)) < 
+        Math.sqrt((best_coord_x - clicked_pseudo_x)*(best_coord_x - clicked_pseudo_x) + (best_coord_y - clicked_pseudo_y)*(best_coord_y - clicked_pseudo_y))) {
+            best_coord_x = list_t[i];
+            best_coord_y = list_y[i];
+        }
+    }
+    c.beginPath();
+    c.arc((pseudo_width/2 + best_coord_x) * t_coef, (pseudo_height/2 - best_coord_y) * y_coef, 5, 0 , 2*Math.PI);
+    c.fillStyle = "green";
+    c.fill();
+
+    t_answer.innerHTML = "t: " + best_coord_x;
+    y_answer.innerHTML = "y: " + best_coord_y;
 }
 
-
-// function draw_coords_num() {
-//     let step_y = Math.ceil(canvas.height/12);
-//     let current_y = canvas.height;
-//     let current_num;
-//     for (let i = 1; i <= 10; i++) {
-//         current_y -= step_y;
-//         console.log("pseudo height = ", pseudo_height);
-//         console.log("current_y = ", current_y);
-//         console.log("y_coef = ", y_coef);
-//         current_num = (pseudo_height/2 - current_y / y_coef);
-//         draw_coord_y_num(current_y, current_num.toExponential(1));
-//     }
-// }
 
 function draw_coord_x_num(x, num) {
     c.beginPath();
@@ -101,4 +121,39 @@ function draw_coord_y_num(y, num) {
     c.fillStyle = "black";
     c.font = "12px Arial";
     c.fillText(num, canvas.width/2 + 0.01 * canvas.width, y - 0.01*canvas.height);
+}
+
+let mouse_point_x = canvas.width/2;
+let mouse_point_y = canvas.height/2;
+
+canvas.addEventListener("mousemove", function(event) {
+    mouse_point_x = event.offsetX;
+    mouse_point_y = event.offsetY;
+})
+
+let mouse_click_x = canvas.width/2;
+let mouse_click_y = canvas.height/2;
+
+canvas.addEventListener("click", function(event) {
+    mouse_click_x = event.offsetX;
+    mouse_click_y = event.offsetY;
+    draw_graph();
+});
+
+
+
+function animate() {
+    window.requestAnimationFrame(animate);
+    c.fillStyle = "white";
+    c.fillRect(0, 0, canvas.width*0.15, canvas.height*0.1);
+
+    // write t
+    c.fillStyle = "black";
+    c.font = "12px Arial";
+    c.fillText("t = " + (-pseudo_width/2 + mouse_point_x / t_coef).toExponential(2), 0.01 * canvas.width, canvas.height*0.04);
+
+    // write y
+    c.fillStyle = "black";
+    c.font = "12px Arial";
+    c.fillText("y = " + (pseudo_height/2 - mouse_point_y / y_coef).toExponential(2), 0.01 * canvas.width, canvas.height*0.09);
 }
