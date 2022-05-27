@@ -13,17 +13,32 @@ let pseudo_height;
 let t_coef;
 let y_coef;
 
-function draw_graph() {
+
+
+function draw_graph(index_1, index_2) {
     // console.log("t_coef = ", t_coef);
     c.rect(0,0, canvas.width, canvas.height);
     c.fillStyle = "white";
     c.fill();
     c.stroke();
 
-    min_y = Math.min(...list_y);
-    max_y = Math.max(...list_y);
-    min_t = Math.min(...list_t);
-    max_t = Math.max(...list_t);
+    if (index_1 == "t") {
+        list_Y = list_t;
+    } else {
+        list_Y = list_y[Number(index_1)];
+    }
+
+    if (index_2 == "t") {
+        list_X = list_t;
+    } else {
+        list_X = list_y[Number(index_2)];
+    }
+
+
+    min_y = Math.min(...list_Y);
+    max_y = Math.max(...list_Y);
+    min_t = Math.min(...list_X);
+    max_t = Math.max(...list_X);
     
     pseudo_width = 2*Math.max(Math.abs(max_t), Math.abs(min_t));
     pseudo_height = 2*Math.max(Math.abs(max_y), Math.abs(min_y));
@@ -69,24 +84,24 @@ function draw_graph() {
     }
 
     
-    for (let i = 0; i < list_y.length; i++) {
+    for (let i = 0; i < list_Y.length; i++) {
         c.beginPath();
-        c.arc((pseudo_width/2 + list_t[i]) * t_coef, (pseudo_height/2 - list_y[i]) * y_coef, 3, 0 , 2*Math.PI);
+        c.arc((pseudo_width/2 + list_X[i]) * t_coef, (pseudo_height/2 - list_Y[i]) * y_coef, 3, 0 , 2*Math.PI);
         c.fillStyle = "red";
         c.fill();
     }
 
 
     // draw green dot
-    let best_coord_x = list_t[0];
-    let best_coord_y = list_y[0];
+    let best_coord_x = list_X[0];
+    let best_coord_y = list_Y[0];
     let clicked_pseudo_x = -pseudo_width/2 + mouse_click_x / t_coef;
     let clicked_pseudo_y = pseudo_height/2 - mouse_click_y / y_coef;
-    for (let i = 0; i < list_y.length; i++) {
-        if (Math.sqrt((list_t[i] - clicked_pseudo_x)*(list_t[i] - clicked_pseudo_x) + (list_y[i] - clicked_pseudo_y)*(list_y[i] - clicked_pseudo_y)) < 
+    for (let i = 0; i < list_Y.length; i++) {
+        if (Math.sqrt((list_X[i] - clicked_pseudo_x)*(list_X[i] - clicked_pseudo_x) + (list_Y[i] - clicked_pseudo_y)*(list_Y[i] - clicked_pseudo_y)) < 
         Math.sqrt((best_coord_x - clicked_pseudo_x)*(best_coord_x - clicked_pseudo_x) + (best_coord_y - clicked_pseudo_y)*(best_coord_y - clicked_pseudo_y))) {
-            best_coord_x = list_t[i];
-            best_coord_y = list_y[i];
+            best_coord_x = list_X[i];
+            best_coord_y = list_Y[i];
         }
     }
     c.beginPath();
@@ -137,7 +152,7 @@ let mouse_click_y = canvas.height/2;
 canvas.addEventListener("click", function(event) {
     mouse_click_x = event.offsetX;
     mouse_click_y = event.offsetY;
-    draw_graph();
+    draw_graph(y_axis, x_axis);
 });
 
 
