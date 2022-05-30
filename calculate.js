@@ -2,6 +2,7 @@
 
 
 but.addEventListener("click", function() {
+    document.getElementById("see_values").style.display = "";
     y_axis = document.getElementById("show_y_axis").value;
     x_axis = document.getElementById("show_x_axis").value;
     h = Number(document.getElementById("step").value);
