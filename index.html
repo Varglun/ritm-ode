@@ -17,6 +17,7 @@
 <body>
     <p>You can use this app to solve numerically first-order system of ODE of type: \(\textbf{y}' = \textbf{f}(t, \textbf{y})\).</p>
     <p> <b>Attention!</b> Use accurately as there is no check for the bad initial conditions and mistakes in function. </p>
+    <p>Click "Hint" button to see possible math functions you can use.</p>
     <button id="show_functions">Hint: math functions designation</button>
     <div id="math_functions" style="display: none;">
         <table>
@@ -26,46 +27,48 @@
             </tr>
             <tr>
                 <td>\(a^b\)</td>
-                <td>Math.pow(a,b)</td>
+                <td>pow(a,b)</td>
             </tr>
             <tr>
                 <td>\(e^t\)</td>
-                <td>Math.exp(t)</td>
+                <td>exp(t)</td>
             </tr>
             <tr>
                 <td>\(\ln{t}\)</td>
-                <td>Math.log(t)</td>
+                <td>ln(t)</td>
             </tr>
             <tr>
                 <td>\(\sin{t}\)</td>
-                <td>Math.sin(t)</td>
+                <td>sin(t)</td>
             </tr>
             <tr>
                 <td>\(\cos{t}\)</td>
-                <td>Math.cos(t)</td>
+                <td>cos(t)</td>
             </tr>
             <tr>
                 <td>\(\tan{t}\)</td>
-                <td>Math.tan(t)</td>
+                <td>tan(t)</td>
             </tr>
             <tr>
                 <td>\(\arcsin{t}\)</td>
-                <td>Math.asin(t)</td>
+                <td>asin(t)</td>
             </tr>
             <tr>
                 <td>\(\arccos{t}\)</td>
-                <td>Math.acos(t)</td>
+                <td>acos(t)</td>
             </tr>
             <tr>
                 <td>\(\arctan{t}\)</td>
-                <td>Math.atan(t)</td>
+                <td>atan(t)</td>
             </tr>
             <tr>
                 <td>\(\pi\)</td>
-                <td>Math.PI</td>
+                <td>pi</td>
             </tr>
         </table>
     </div>
+    <p>\(\textbf{y} \) and \(\textbf{f}\) are vectors. Use underscore to insert subscripts to denote vector components. You should use zero-base notation. </p>
+    <p>So, write <em>y_0</em> to denote \(y_0\). You should write subscripts even if there is only one equation.</p>
     <script>
         let functions_show = false;
         document.getElementById("show_functions").addEventListener("click", function() {
@@ -79,8 +82,7 @@
             
         })
     </script>
-    <br>
-    <button id="add_equation" name="add_equation" style="margin-top: 5mm;">Add equation</button>
+    <button id="add_equation" name="add_equation" style="margin-top: 5mm;">Add an equation</button>
     <div id="input_functions">
 
     </div>
@@ -113,7 +115,12 @@
             input.type = "text";
             input.id = "initial_y_" + i;
             input.name = "initial_y_" + i;
-            input.value = "0";
+            
+            if (i == 0) {
+                input.value = "1";
+            } else {
+                input.value = "0";
+            }
             input.size = "5";
             label.appendChild(input);
             document.getElementById("initial_values").appendChild(label);
@@ -128,6 +135,9 @@
             input.type = "text";
             input.id = "input_text_" + i;
             input.name = "input_text_" + i;
+            if (i == 0) {
+                input.value = "y_0";
+            }
             div_eq.appendChild(label);
             label.appendChild(input);
             document.getElementById("input_functions").appendChild(div_eq);
@@ -142,16 +152,8 @@
         document.getElementById("add_equation").addEventListener("click", function() {
             document.getElementById("eq_" + eq_counter).style = "display: ";
             document.getElementById("y_init_" + eq_counter).style = "display: ";
-
-            option = document.createElement("option");
-            option.value = eq_counter;
-            option.innerHTML = "y_" + eq_counter;
-            document.getElementById("show_y_axis").appendChild(option);
-            option = document.createElement("option");
-            option.value = eq_counter;
-            option.innerHTML = "y_" + eq_counter;
-            document.getElementById("show_x_axis").appendChild(option);
-
+            document.getElementById("axis_y_option_" + eq_counter).style.display = "";
+            document.getElementById("axis_x_option_" + eq_counter).style.display = "";
             eq_counter += 1;
             for (let a of document.getElementsByClassName("MathJax CtxtMenu_Attached_0")){
                 a.style.fontSize = "101.1%";
@@ -164,15 +166,13 @@
     </div>
     <div>
         <label for="final_t">Final value of \(t\) (\(t \gt t_{0}\)): </label>
-        <input type="text" id="final_t" name="final_t" size="5">
+        <input type="text" id="final_t" name="final_t" size="5" value="1">
     </div>
     <div>
         <label for="step">Define time step: </label>
         <input type="text" id="step" name="step" value="0.1" size="5">
     </div>
 
-
-    <!-- <p id="answer" style="font-size: 10mm;"></p> -->
     <div>
         <label for="show_y_axis">Choose Y axis: </label>
         <select name="show_y_axis" id="show_y_axis">
@@ -194,27 +194,28 @@
         option.innerHTML = "t";
         document.getElementById("show_x_axis").appendChild(option);
 
-        option = document.createElement("option");
-        option.value = "0";
-        option.innerHTML = "y_0";
-        document.getElementById("show_y_axis").appendChild(option);
-        option = document.createElement("option");
-        option.value = "0";
-        option.innerHTML = "y_0";
-        document.getElementById("show_x_axis").appendChild(option);
-        // for (let i = 0; i < eq_counter; i++) {
-        //     option = document.createElement("option");
-        //     option.value = i;
-        //     option.innerHTML = "y_" + i;
-        //     document.getElementById("show_y_axis").appendChild(option);
-        //     option = document.createElement("option");
-        //     option.value = i;
-        //     option.innerHTML = "y_" + i;
-        //     document.getElementById("show_x_axis").appendChild(option);
-        // }
+
+        for (let i = 0; i < 10; i++) {
+            option = document.createElement("option");
+            option.id = "axis_y_option_" + i;
+            option.value = i;
+            option.innerHTML = "y_" + i;
+            option.style.display = "none";
+            document.getElementById("show_y_axis").appendChild(option);
+            option = document.createElement("option");
+            option.id = "axis_x_option_" + i;
+            option.value = i;
+            option.innerHTML = "y_" + i;
+            option.style.display = "none";
+            document.getElementById("show_x_axis").appendChild(option);
+        }
+        document.getElementById("axis_y_option_0").style.display = "";
+        document.getElementById("axis_x_option_0").style.display = "";
+        document.getElementById("show_y_axis").value = "0";
+
     </script>
     <div>
-        <input type="submit" id="but_submit" value="Calculate">
+        <input type="submit" id="but_submit" value="Calculate & Plot">
     </div>   
     <p id="t_answer" style="font-size: 10mm;"></p>
     <p id="y_answer" style="font-size: 10mm;"></p>

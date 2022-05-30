@@ -16,7 +16,6 @@ let y_coef;
 
 
 function draw_graph(index_1, index_2) {
-    // console.log("t_coef = ", t_coef);
     c.rect(0,0, canvas.width, canvas.height);
     c.fillStyle = "white";
     c.fill();
@@ -109,8 +108,17 @@ function draw_graph(index_1, index_2) {
     c.fillStyle = "green";
     c.fill();
 
-    t_answer.innerHTML = "t: " + best_coord_x;
-    y_answer.innerHTML = "y: " + best_coord_y;
+    if (index_1 == "t") {
+        y_answer.innerHTML = "t: " + best_coord_y;
+    } else {
+        y_answer.innerHTML = `y_${index_1}: ` + best_coord_y;
+    }
+    if (index_2 == "t") {
+        t_answer.innerHTML = "t: " + best_coord_x;
+    } else {
+        t_answer.innerHTML = `y_${index_2}: ` + best_coord_x;
+    }
+    
 }
 
 

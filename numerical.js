@@ -3,7 +3,6 @@ let y_axis;
 let x_axis;
 let h = Number(document.getElementById("step").value);
 let t_0 = Number(document.getElementById("initial_t").value);
-// let y_0 = Number(document.getElementById("initial_y").value);
 let y_0 = [];
 let t_start = Number(document.getElementById("start_t").value);
 let t_finish = Number(document.getElementById("final_t").value);

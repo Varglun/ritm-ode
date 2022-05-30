@@ -22,6 +22,22 @@ but.addEventListener("click", function() {
         for (let j = 0; j < eq_counter; j++) {
             function_text = function_text.replaceAll("y_" + j, "y[" + j + "]");
         }
+        function_text = function_text.replaceAll("sin", "Math.sin");
+        function_text = function_text.replaceAll("cos", "Math.cos");
+        function_text = function_text.replaceAll("exp", "Math.exp");
+        function_text = function_text.replaceAll("tan", "Math.tan");
+        function_text = function_text.replaceAll("atan", "Math.atan");
+        function_text = function_text.replaceAll("ln", "Math.log");
+        function_text = function_text.replaceAll("asin", "Math.asin");
+        function_text = function_text.replaceAll("acos", "Math.acos");
+        function_text = function_text.replaceAll("pow", "Math.pow");
+        function_text = function_text.replaceAll("pi", "Math.PI");
+        function_text = function_text.replaceAll("sinh", "Math.sinh");
+        function_text = function_text.replaceAll("cosh", "Math.cosh");
+        function_text = function_text.replaceAll("tanh", "Math.tanh");
+        function_text = function_text.replaceAll("asinh", "Math.asinh");
+        function_text = function_text.replaceAll("acosh", "Math.acosh");
+        function_text = function_text.replaceAll("atanh", "Math.atanh");
         text_fun.push(function_text);
     }
     
