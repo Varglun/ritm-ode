@@ -100,7 +100,7 @@
         <label>Initial values: </label>
         <br>
         <label for="initial_t">\(t_{0}\): </label>
-        <input type="text" id="initial_t" name="initial_t" value="0" size="5">        
+        <input type="text" id="initial_t" name="initial_t" value="0" size="5"> 
     </div>
     <script>
         let label;
@@ -110,19 +110,19 @@
             label = document.createElement("label");
             label.id = "y_init_" + i;
             label.style = "display: none;";
+            label.style.marginTop = "2mm";
             label.innerHTML = "\\(y_{" + i + "}(t_{0})\\): ";
             input = document.createElement("input");
             input.type = "text";
             input.id = "initial_y_" + i;
             input.name = "initial_y_" + i;
-            
             if (i == 0) {
                 input.value = "1";
             } else {
                 input.value = "0";
             }
             input.size = "5";
-            label.appendChild(input);
+            label.appendChild(input);            
             document.getElementById("initial_values").appendChild(label);
 
             div_eq = document.createElement("div");
@@ -146,12 +146,12 @@
 
 
 
-        document.getElementById("y_init_0").style = "display: ";
+        document.getElementById("y_init_0").style.display = "block";
         document.getElementById("eq_0").style = "display: ";
         let eq_counter = 1;
         document.getElementById("add_equation").addEventListener("click", function() {
             document.getElementById("eq_" + eq_counter).style = "display: ";
-            document.getElementById("y_init_" + eq_counter).style = "display: ";
+            document.getElementById("y_init_" + eq_counter).style.display = "block";
             document.getElementById("axis_y_option_" + eq_counter).style.display = "";
             document.getElementById("axis_x_option_" + eq_counter).style.display = "";
             eq_counter += 1;
