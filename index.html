@@ -15,6 +15,7 @@
 
 </head>
 <body>
+    <h3 style="margin-bottom: 10mm;">Author: Timur Vorobiev. Email: timurlan@yandex.ru; varglun@gmail.com</h3>
     <p>You can use this app to solve numerically first-order system of ODE of type: \(\textbf{y}' = \textbf{f}(t, \textbf{y})\).</p>
     <p> <b>Attention!</b> Use accurately as there is no check for the bad initial conditions and mistakes in function. </p>
     <p>Click "Hint" button to see possible math functions you can use.</p>
@@ -70,7 +71,7 @@
     <p>\(\textbf{y} \) and \(\textbf{f}\) are vectors. Use underscore to insert subscripts to denote vector components. You should use zero-base notation. </p>
     <p>So, write <em>y_0</em> to denote \(y_0\). You should write subscripts even if there is only one equation.</p>
     <script>
-        let functions_show = false;
+        let functions_show = false; // show math functions designation
         document.getElementById("show_functions").addEventListener("click", function() {
             if (!functions_show) {
                 document.getElementById("math_functions").style = "display: ;"
@@ -82,7 +83,8 @@
             
         })
     </script>
-    <button id="add_equation" name="add_equation" style="margin-top: 5mm;">Add an equation</button>
+    <button id="add_equation" name="add_equation" style="margin-top: 5mm;">Add equation</button>
+    <button id="remove_equation" name="remove_equation" style="margin-top: 5mm; margin-left: 3mm;">Remove last equation</button>
     <div id="input_functions">
 
     </div>
@@ -103,10 +105,15 @@
         <input type="text" id="initial_t" name="initial_t" value="0" size="5"> 
     </div>
     <script>
+        
+
+        const number_maximum_equations = 10;
         let label;
         let input;
         let div_eq;
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < number_maximum_equations; i++) {
+            // predefine y_i input fields, so that LATEX notation look correctly
+
             label = document.createElement("label");
             label.id = "y_init_" + i;
             label.style = "display: none;";
@@ -125,6 +132,8 @@
             label.appendChild(input);            
             document.getElementById("initial_values").appendChild(label);
 
+            // predefine input fields for equations, so that LATEX notation look correctly
+
             div_eq = document.createElement("div");
             div_eq.id = "eq_" + i;
             div_eq.style = "display: none;";
@@ -133,6 +142,7 @@
             label.innerHTML = "\\(f_{"+ i +"}(t,\\textbf{y})\\): ";
             input = document.createElement("input");
             input.type = "text";
+            input.size = 50;
             input.id = "input_text_" + i;
             input.name = "input_text_" + i;
             if (i == 0) {
@@ -148,7 +158,7 @@
 
         document.getElementById("y_init_0").style.display = "block";
         document.getElementById("eq_0").style = "display: ";
-        let eq_counter = 1;
+        let eq_counter = 1; // number of equations (order of ODE)
         document.getElementById("add_equation").addEventListener("click", function() {
             document.getElementById("eq_" + eq_counter).style = "display: ";
             document.getElementById("y_init_" + eq_counter).style.display = "block";
@@ -158,6 +168,16 @@
             for (let a of document.getElementsByClassName("MathJax CtxtMenu_Attached_0")){
                 a.style.fontSize = "101.1%";
             };
+        })
+        document.getElementById("remove_equation").addEventListener("click", function() {
+            if (eq_counter > 1) {
+                eq_counter -= 1;
+                document.getElementById("eq_" + eq_counter).style = "display: none";
+                document.getElementById("y_init_" + eq_counter).style.display = "none";
+                document.getElementById("axis_y_option_" + eq_counter).style.display = "none";
+                document.getElementById("axis_x_option_" + eq_counter).style.display = "none";    
+            }
+        
         })
     </script>
     <div>
@@ -184,6 +204,8 @@
         </select>
     </div>
     <script>
+        // predefine axis options, so that LATEX notation look correctly
+
         let option;
         option = document.createElement("option");
         option.value = "t";
@@ -195,7 +217,7 @@
         document.getElementById("show_x_axis").appendChild(option);
 
 
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < number_maximum_equations; i++) {
             option = document.createElement("option");
             option.id = "axis_y_option_" + i;
             option.value = i;
@@ -216,6 +238,7 @@
     </script>
     <div>
         <input type="submit" id="but_submit" value="Calculate & Plot">
+        <button id="save_csv" name="save_csv" style="display: none;">Save to csv</button>
     </div>   
     <p id="t_answer" style="font-size: 7mm;"></p>
     <p id="y_answer" style="font-size: 7mm;"></p>
@@ -226,6 +249,38 @@
     <script src="euler-implicit.js"></script>
     <script src="calculate.js"></script>
     <script src="draw_graph.js"></script>
+    
+    <script>
+        document.getElementById("save_csv").addEventListener("click", function() {
+            let rows = [];
+            rows.push([]);
+            rows[0].push("t");
+            for (let j = 0; j < eq_counter; j++) {
+                rows[0].push("y_" + j);
+            }
+
+            for (let i = 0; i < list_t.length; i++) {
+                rows.push([]);
+                rows[i+1].push(list_t[i]);
+                for (let j = 0; j < eq_counter; j++) {
+                    rows[i+1].push(list_y[j][i]);
+                }
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8," 
+                + rows.map(e => e.join(",")).join("\n");
+
+            let encodedUri = encodeURI(csvContent);
+
+            let ss = document.createElement('a');
+            ss.download = 'my_data.csv';
+            ss.href = encodedUri;
+            document.body.appendChild(ss);
+            ss.click();
+        })
+
+
+    </script>
 </body>
 </html>
 

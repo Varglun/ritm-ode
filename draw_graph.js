@@ -3,19 +3,22 @@ const c = canvas.getContext('2d');
 canvas.width = 500;
 canvas.height = 500;
 
+// to find the size of the canvas
 let min_y;
 let max_y;
 let min_t;
 let max_t;
 
-let pseudo_width;
-let pseudo_height;
-let t_coef;
-let y_coef;
+let pseudo_width; // width of the canvas in units of function
+let pseudo_height; // height of the canvas in units of function
+let t_coef; // canvas.width/pseudo_width
+let y_coef; // canvas.height/pseudo_height
 
 
 
 function draw_graph(index_1, index_2) {
+    // draw graphic for index_1 (Y-axis) vs index_2 (X-axis)
+
     c.rect(0,0, canvas.width, canvas.height);
     c.fillStyle = "white";
     c.fill();
@@ -44,6 +47,9 @@ function draw_graph(index_1, index_2) {
     t_coef = canvas.width/pseudo_width;
     y_coef = canvas.height/pseudo_height;
 
+
+    // draw axis
+
     c.lineWidth = 2;
     c.setLineDash([]);
     
@@ -56,6 +62,9 @@ function draw_graph(index_1, index_2) {
     c.moveTo(canvas.width/2, 0);
     c.lineTo(canvas.width/2, canvas.height);
     c.stroke();
+
+
+    // write values and draw vertical and horizontal lines (net)
 
     let step_y = canvas.height/10;
     let current_y = canvas.height;
@@ -82,7 +91,7 @@ function draw_graph(index_1, index_2) {
         }
     }
 
-    
+    // draw path of the solution
     for (let i = 0; i < list_Y.length; i++) {
         c.beginPath();
         c.arc((pseudo_width/2 + list_X[i]) * t_coef, (pseudo_height/2 - list_Y[i]) * y_coef, 3, 0 , 2*Math.PI);
@@ -108,6 +117,8 @@ function draw_graph(index_1, index_2) {
     c.fillStyle = "green";
     c.fill();
 
+    // write values for the selected point
+
     if (index_1 == "t") {
         y_answer.innerHTML = "t: " + best_coord_y;
     } else {
@@ -123,6 +134,7 @@ function draw_graph(index_1, index_2) {
 
 
 function draw_coord_x_num(x, num) {
+    // draw vertical lines
     c.beginPath();
     c.setLineDash([10,10]);
     c.lineWidth = 0.5;
@@ -135,6 +147,7 @@ function draw_coord_x_num(x, num) {
 }
 
 function draw_coord_y_num(y, num) {
+    // draw horizontal lines
     c.beginPath();
     c.lineWidth = 0.5;
     c.setLineDash([10,10]);
